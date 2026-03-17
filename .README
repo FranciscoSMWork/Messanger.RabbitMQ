@@ -1,0 +1,134 @@
+📌 Introdução
+    Este projeto tem como objetivo demonstrar a construção de uma API utilizando .NET 8 e C#, aplicando conceitos de arquitetura em camadas, autenticação com ASP.NET Identity e mensageria assíncrona com RabbitMQ.
+    O foco principal do projeto é demonstrar:
+        separação de responsabilidades entre camadas
+        baixo acoplamento
+        alta coesão
+        organização arquitetural
+        comunicação assíncrona utilizando mensageria
+
+    Além disso, o projeto utiliza Docker para execução do RabbitMQ, facilitando a configuração do ambiente de desenvolvimento.
+    O projeto foi desenvolvido com fins de estudo, prática de arquitetura e evolução técnica em .NET.
+
+🧠 Tema do projeto
+    O sistema consiste em uma API para gerenciamento de usuários e pedidos (orders).
+    A aplicação permite que usuários se registrem, realizem login e criem pedidos associados à sua conta.
+
+Entidades principais
+    User
+    Order
+
+Regras de negócio
+    Usuários podem se registrar no sistema sem estarem autenticados
+    Usuários podem realizar login
+    Apenas usuários autenticados podem listar usuários
+    Apenas usuários autenticados podem criar orders
+    Apenas usuários autenticados podem listar orders
+    Cada Order está associada ao usuário que a criou
+    Ao listar Orders, o sistema retorna também o User responsável
+    Ao listar Users, o sistema retorna as Orders criadas por cada usuário
+
+🧪 Arquitetura Utilizada
+
+O projeto foi estruturado utilizando uma arquitetura em camadas, separando claramente as responsabilidades da aplicação.
+Principais conceitos aplicados:
+    Arquitetura em Camadas
+    Dependency Injection
+    Separação de responsabilidades
+    Mensageria assíncrona
+    Autenticação com Identity
+
+📨 RabbitMQ
+    O RabbitMQ é um message broker responsável por intermediar a comunicação entre sistemas através de filas de mensagens.
+    Ele permite que aplicações troquem informações de forma assíncrona, promovendo maior desacoplamento entre serviços.
+    Principais benefícios do RabbitMQ:
+        comunicação assíncrona
+        desacoplamento entre sistemas
+        maior escalabilidade
+        maior resiliência em arquiteturas distribuídas
+    Neste projeto, o RabbitMQ é utilizado para publicação e processamento de mensagens relacionadas às Orders.
+
+🏗️ Estrutura do projeto
+
+API
+    Responsável pela comunicação externa com o sistema.
+    Principais responsabilidades:
+        Exposição dos endpoints HTTP
+        Recebimento das requisições
+        Autenticação de usuários
+        Serialização e desserialização de dados
+        Configuração de middlewares
+        Injeção de dependências
+        A camada de API não contém regras de negócio.
+
+Application
+    Responsável pelos casos de uso da aplicação.
+    Principais responsabilidades:
+        Implementação das regras de negócio
+        Orquestração das operações do sistema
+        Comunicação entre entidades e serviços
+        Implementação dos Services
+        Validações de fluxo da aplicação
+        Essa camada coordena as operações entre Domain e Infrastructure.
+
+Infrastructure
+    Responsável pela integração com tecnologias externas e persistência de dados.
+    Principais responsabilidades:
+        Configuração do banco de dados
+        Implementação dos repositórios
+        Integração com RabbitMQ
+        Configuração do Entity Framework
+        Implementação de serviços externos
+        Essa camada depende do Domain, mas o Domain não depende dela.
+
+Domain
+    Camada central da aplicação.
+    Principais responsabilidades:
+        Entidades do domínio
+        Regras de negócio principais
+        Interfaces de repositórios
+        Modelos de domínio
+        Essa camada não possui dependências externas, sendo o núcleo do sistema.
+
+📌 Pré-requisitos
+    Ambiente de Desenvolvimento
+        .NET SDK 8.0
+        Docker
+        Git
+        Visual Studio 2022 ou VS Code (opcional)
+
+🐳 RabbitMQ com Docker
+    Para executar o sistema de mensageria é necessário ter o Docker instalado e em execução.
+    Execute o seguinte comando para iniciar o RabbitMQ com interface administrativa:
+
+    docker run -d \
+    --hostname rabbitmq \
+    --name rabbitmq \
+    -p 5672:5672 \
+    -p 15672:15672 \
+    rabbitmq:3-management
+
+    Após iniciar o container, o painel administrativo poderá ser acessado em:
+
+    http://localhost:15672
+
+    Credenciais padrão:
+
+    username: guest
+    password: guest
+
+🚀 Passo a passo para inicializar o projeto
+    1 - Clonar o repositório
+    git clone <url-do-repositorio>
+    2 - Entrar no diretório do projeto
+    cd <nome-do-projeto>
+    3 - Restaurar dependências
+    dotnet restore
+    4 - Atualizar banco de dados
+    dotnet ef database update
+    5 - Executar o projeto
+    dotnet run
+    6 - Acessar documentação da API
+
+Após iniciar a aplicação, acessar:
+    https://localhost:xxxx/swagger
