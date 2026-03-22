@@ -14,7 +14,7 @@ public class MessangerDbContextFactory : IDesignTimeDbContextFactory<MessangerDb
             .Build();
 
         var connectionString =
-            configuration.GetConnectionString("DefaultConnection");
+            configuration.GetConnectionString("MessangerConnection");
 
         var optionsBuilder = new DbContextOptionsBuilder<MessangerDbContext>();
         optionsBuilder.UseSqlServer(connectionString);
